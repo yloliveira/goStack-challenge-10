@@ -6,27 +6,14 @@ import { Form } from './styles';
 import Modal from '../Modal';
 import Input from '../Input';
 
-interface IFoodPlate {
-  id: number;
-  name: string;
-  image: string;
-  price: string;
-  description: string;
-  available: boolean;
-}
+import IFoodPlateDTO from '../../dtos/IFoodPlateDTO';
+import IEditFoodDTO from '../../dtos/IEditFoodDTO';
 
 interface IModalProps {
   isOpen: boolean;
   setIsOpen: () => void;
-  handleUpdateFood: (food: Omit<IFoodPlate, 'id' | 'available'>) => void;
-  editingFood: IFoodPlate;
-}
-
-interface IEditFoodData {
-  name: string;
-  image: string;
-  price: string;
-  description: string;
+  handleUpdateFood: (food: Omit<IFoodPlateDTO, 'id' | 'available'>) => void;
+  editingFood: IFoodPlateDTO;
 }
 
 const ModalEditFood: React.FC<IModalProps> = ({
@@ -38,8 +25,9 @@ const ModalEditFood: React.FC<IModalProps> = ({
   const formRef = useRef<FormHandles>(null);
 
   const handleSubmit = useCallback(
-    async (data: IEditFoodData) => {
-      // EDIT A FOOD PLATE AND CLOSE THE MODAL
+    async (data: IEditFoodDTO) => {
+      handleUpdateFood(data);
+      setIsOpen();
     },
     [handleUpdateFood, setIsOpen],
   );

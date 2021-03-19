@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 
 import IFoodPlateDTO from '../../dtos/IFoodPlateDTO';
-import { list, create } from '../../services/foods';
+import { list, create, update } from '../../services/foods';
 
 import Food from '../../components/Food';
 import ModalAddFood from '../../components/ModalAddFood';
@@ -46,7 +46,17 @@ const Dashboard: React.FC = () => {
   async function handleUpdateFood(
     food: Omit<IFoodPlateDTO, 'id' | 'available'>,
   ): Promise<void> {
-    // TODO UPDATE A FOOD PLATE ON THE API
+    const response = await update({ ...editingFood, ...food });
+    if (response) {
+      setFoods(prevState => {
+        const state = [...prevState];
+        const foodIndex = state.findIndex(({ id }) => id === response.id);
+        if (foodIndex >= 0) {
+          state[foodIndex] = response;
+        }
+        return state;
+      });
+    }
   }
 
   async function handleDeleteFood(id: number): Promise<void> {
@@ -62,7 +72,8 @@ const Dashboard: React.FC = () => {
   }
 
   function handleEditFood(food: IFoodPlateDTO): void {
-    // TODO SET THE CURRENT EDITING FOOD ID IN THE STATE
+    setEditingFood(food);
+    toggleEditModal();
   }
 
   return (

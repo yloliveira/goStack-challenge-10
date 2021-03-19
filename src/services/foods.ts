@@ -21,3 +21,14 @@ export const create = async (
     return undefined;
   }
 };
+
+export const update = async (
+  food: IFoodPlateDTO,
+): Promise<IFoodPlateDTO | undefined> => {
+  try {
+    const response = await api.put(`/foods/${food.id}`, food);
+    return response.data;
+  } catch (error) {
+    return undefined;
+  }
+};
