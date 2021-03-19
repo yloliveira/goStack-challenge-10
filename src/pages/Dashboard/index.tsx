@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import Header from '../../components/Header';
 
-import api from '../../services/api';
+import IFoodPlateDTO from '../../dtos/IFoodPlateDTO';
+import { list } from '../../services/foods';
 
 import Food from '../../components/Food';
 import ModalAddFood from '../../components/ModalAddFood';
@@ -10,31 +11,27 @@ import ModalEditFood from '../../components/ModalEditFood';
 
 import { FoodsContainer } from './styles';
 
-interface IFoodPlate {
-  id: number;
-  name: string;
-  image: string;
-  price: string;
-  description: string;
-  available: boolean;
-}
-
 const Dashboard: React.FC = () => {
-  const [foods, setFoods] = useState<IFoodPlate[]>([]);
-  const [editingFood, setEditingFood] = useState<IFoodPlate>({} as IFoodPlate);
+  const [foods, setFoods] = useState<IFoodPlateDTO[]>([]);
+  const [editingFood, setEditingFood] = useState<IFoodPlateDTO>(
+    {} as IFoodPlateDTO,
+  );
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
 
   useEffect(() => {
     async function loadFoods(): Promise<void> {
-      // TODO LOAD FOODS
+      const response = await list();
+      if (response.length) {
+        setFoods(response);
+      }
     }
 
     loadFoods();
   }, []);
 
   async function handleAddFood(
-    food: Omit<IFoodPlate, 'id' | 'available'>,
+    food: Omit<IFoodPlateDTO, 'id' | 'available'>,
   ): Promise<void> {
     try {
       // TODO ADD A NEW FOOD PLATE TO THE API
@@ -44,7 +41,7 @@ const Dashboard: React.FC = () => {
   }
 
   async function handleUpdateFood(
-    food: Omit<IFoodPlate, 'id' | 'available'>,
+    food: Omit<IFoodPlateDTO, 'id' | 'available'>,
   ): Promise<void> {
     // TODO UPDATE A FOOD PLATE ON THE API
   }
@@ -61,7 +58,7 @@ const Dashboard: React.FC = () => {
     setEditModalOpen(!editModalOpen);
   }
 
-  function handleEditFood(food: IFoodPlate): void {
+  function handleEditFood(food: IFoodPlateDTO): void {
     // TODO SET THE CURRENT EDITING FOOD ID IN THE STATE
   }
 
