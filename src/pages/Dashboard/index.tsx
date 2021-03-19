@@ -86,6 +86,20 @@ const Dashboard: React.FC = () => {
     toggleEditModal();
   }
 
+  async function handleChangeAvailability(food: IFoodPlateDTO): Promise<void> {
+    const response = await update(food);
+    if (response) {
+      setFoods(prevState => {
+        const state = [...prevState];
+        const foodIndex = state.findIndex(({ id }) => id === response.id);
+        if (foodIndex >= 0) {
+          state[foodIndex] = response;
+        }
+        return state;
+      });
+    }
+  }
+
   return (
     <>
       <Header openModal={toggleModal} />
@@ -109,6 +123,7 @@ const Dashboard: React.FC = () => {
               food={food}
               handleDelete={handleDeleteFood}
               handleEditFood={handleEditFood}
+              handleChangeAvailability={handleChangeAvailability}
             />
           ))}
       </FoodsContainer>
