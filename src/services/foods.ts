@@ -32,3 +32,12 @@ export const update = async (
     return undefined;
   }
 };
+
+export const del = async (id: number): Promise<boolean> => {
+  try {
+    await api.delete(`/foods/${id}`);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};

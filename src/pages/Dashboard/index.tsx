@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 
 import IFoodPlateDTO from '../../dtos/IFoodPlateDTO';
-import { list, create, update } from '../../services/foods';
+import { list, create, update, del } from '../../services/foods';
 
 import Food from '../../components/Food';
 import ModalAddFood from '../../components/ModalAddFood';
@@ -60,7 +60,17 @@ const Dashboard: React.FC = () => {
   }
 
   async function handleDeleteFood(id: number): Promise<void> {
-    // TODO DELETE A FOOD PLATE FROM THE API
+    const response = await del(id);
+    if (response) {
+      setFoods(prevState => {
+        const state = [...prevState];
+        const foodIndex = state.findIndex(food => food.id === id);
+        if (foodIndex >= 0) {
+          state.splice(foodIndex, 1);
+        }
+        return state;
+      });
+    }
   }
 
   function toggleModal(): void {
