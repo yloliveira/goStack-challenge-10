@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 
 import IFoodPlateDTO from '../../dtos/IFoodPlateDTO';
-import { list } from '../../services/foods';
+import { list, create } from '../../services/foods';
 
 import Food from '../../components/Food';
 import ModalAddFood from '../../components/ModalAddFood';
@@ -34,7 +34,10 @@ const Dashboard: React.FC = () => {
     food: Omit<IFoodPlateDTO, 'id' | 'available'>,
   ): Promise<void> {
     try {
-      // TODO ADD A NEW FOOD PLATE TO THE API
+      const response = await create(food);
+      if (response) {
+        setFoods(prevState => [...prevState, response]);
+      }
     } catch (err) {
       console.log(err);
     }
